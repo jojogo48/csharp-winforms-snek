@@ -33,13 +33,14 @@
             this.startBtn = new System.Windows.Forms.Button();
             this.gameTimer = new System.Windows.Forms.Timer(this.components);
             this.gameContainer = new System.Windows.Forms.Panel();
-            this.feedBtn = new System.Windows.Forms.Button();
+            this.announceLabel = new System.Windows.Forms.Label();
             this.pauseBtn = new System.Windows.Forms.Button();
             this.stopBtn = new System.Windows.Forms.Button();
             this.infoLabel = new System.Windows.Forms.Label();
             this.controlsPanel = new System.Windows.Forms.Panel();
-            this.titleLabel = new System.Windows.Forms.Label();
             this.scoreLabel = new System.Windows.Forms.Label();
+            this.titleLabel = new System.Windows.Forms.Label();
+            this.gameContainer.SuspendLayout();
             this.controlsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,21 +66,26 @@
             // gameContainer
             // 
             this.gameContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
+            this.gameContainer.Controls.Add(this.announceLabel);
             this.gameContainer.Location = new System.Drawing.Point(0, 0);
             this.gameContainer.Name = "gameContainer";
             this.gameContainer.Size = new System.Drawing.Size(300, 300);
             this.gameContainer.TabIndex = 2;
             // 
-            // feedBtn
+            // announceLabel
             // 
-            this.feedBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.feedBtn.Location = new System.Drawing.Point(448, 224);
-            this.feedBtn.Name = "feedBtn";
-            this.feedBtn.Size = new System.Drawing.Size(75, 23);
-            this.feedBtn.TabIndex = 4;
-            this.feedBtn.Text = "Feed";
-            this.feedBtn.UseVisualStyleBackColor = true;
-            this.feedBtn.Click += new System.EventHandler(this.FeedBtn_Click);
+            this.announceLabel.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
+            this.announceLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(227)))), ((int)(((byte)(67)))), ((int)(((byte)(54)))));
+            this.announceLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.announceLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.announceLabel.Font = new System.Drawing.Font("Calibri Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.announceLabel.ForeColor = System.Drawing.Color.White;
+            this.announceLabel.Location = new System.Drawing.Point(0, 241);
+            this.announceLabel.Name = "announceLabel";
+            this.announceLabel.Size = new System.Drawing.Size(300, 59);
+            this.announceLabel.TabIndex = 0;
+            this.announceLabel.Text = "label1";
+            this.announceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // pauseBtn
             // 
@@ -136,17 +142,6 @@
             this.controlsPanel.Size = new System.Drawing.Size(253, 300);
             this.controlsPanel.TabIndex = 12;
             // 
-            // titleLabel
-            // 
-            this.titleLabel.Font = new System.Drawing.Font("Calibri Light", 22F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.titleLabel.ForeColor = System.Drawing.Color.White;
-            this.titleLabel.Location = new System.Drawing.Point(15, 0);
-            this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(225, 45);
-            this.titleLabel.TabIndex = 14;
-            this.titleLabel.Text = "Snek";
-            this.titleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // scoreLabel
             // 
             this.scoreLabel.Font = new System.Drawing.Font("Calibri Light", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -158,13 +153,23 @@
             this.scoreLabel.Text = "Score: 0";
             this.scoreLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // titleLabel
+            // 
+            this.titleLabel.Font = new System.Drawing.Font("Calibri Light", 22F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.titleLabel.ForeColor = System.Drawing.Color.White;
+            this.titleLabel.Location = new System.Drawing.Point(15, 0);
+            this.titleLabel.Name = "titleLabel";
+            this.titleLabel.Size = new System.Drawing.Size(225, 45);
+            this.titleLabel.TabIndex = 14;
+            this.titleLabel.Text = "Snek";
+            this.titleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(551, 300);
             this.Controls.Add(this.controlsPanel);
-            this.Controls.Add(this.feedBtn);
             this.Controls.Add(this.gameContainer);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -172,6 +177,7 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Snek";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.gameContainer.ResumeLayout(false);
             this.controlsPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -182,13 +188,13 @@
         private System.Windows.Forms.Button startBtn;
         private System.Windows.Forms.Timer gameTimer;
         private System.Windows.Forms.Panel gameContainer;
-        private System.Windows.Forms.Button feedBtn;
         private System.Windows.Forms.Button pauseBtn;
         private System.Windows.Forms.Button stopBtn;
         private System.Windows.Forms.Label infoLabel;
         private System.Windows.Forms.Panel controlsPanel;
         private System.Windows.Forms.Label titleLabel;
         private System.Windows.Forms.Label scoreLabel;
+        public System.Windows.Forms.Label announceLabel;
     }
 }
 

@@ -49,8 +49,17 @@ namespace Snake
 
         private void GameTimer_Tick(object sender, EventArgs e)
         {
-            // If Snake is not alive stop timer and return
-            if (Snake.Alive == false) { gameTimer.Stop(); return; }
+            // If Snake is not alive show announcement, stop timer and return
+            if (Snake.Alive == false)
+            {
+                gameTimer.Stop();
+                announceLabel.Text = Helpers.AnnouncementText;
+                announceLabel.BackColor = Helpers.AnnouncementBGC;
+                announceLabel.ForeColor = Helpers.AnnouncementFGC;
+                announceLabel.Visible = true;
+                Console.WriteLine("Snek dead. announceLabel.Visible = " + announceLabel.BackColor);
+                return;
+            }
 
             // Check for collision between snake head and point
             if (Point != null && Helpers.Collides(Snake.Head, Point.Sprite))
@@ -92,10 +101,14 @@ namespace Snake
         //
         private void StartBtn_Click(object sender, EventArgs e)
         {
-            // Setup Game Container
-            gameContainer.Controls.Clear();
-            gameContainer.Invalidate();
-            gameContainer.Refresh();
+            // Clear the Game Container
+            for (int i = gameContainer.Controls.Count - 1; i >= 0; i--)
+            {
+                if (gameContainer.Controls[i] as PictureBox != null) gameContainer.Controls[i].Dispose();
+            }
+
+            // Hide the announcement panel
+            announceLabel.Visible = false;
 
             // Create new Snake
             string size = "Medium"; // DEV PURPOSES
@@ -129,7 +142,7 @@ namespace Snake
                 // Set the text in the button
                 pauseBtn.Text = (gameTimer.Enabled) ? "Pause" : "Continue";
             }
-
+            announceLabel.Visible = !announceLabel.Visible;
             // Focus Game Container to remove the ugly border from the button
             gameContainer.Focus();
         }
@@ -142,10 +155,11 @@ namespace Snake
             // Dispose Snake
             Snake = null;
 
-            // Clear Game Container
-            gameContainer.Controls.Clear();
-            gameContainer.Invalidate();
-            gameContainer.Refresh();
+            // Clear the Game Container
+            for (int i = gameContainer.Controls.Count - 1; i >= 0; i--)
+            {
+                if (gameContainer.Controls[i] as PictureBox != null) gameContainer.Controls[i].Dispose();
+            }
 
             // Remove KeyPressEvent
             (gameContainer as Control).KeyPress -= new KeyPressEventHandler(MainGame);
@@ -154,22 +168,18 @@ namespace Snake
             gameContainer.Focus();
         }
 
-        private void FeedBtn_Click(object sender, EventArgs e)
-        {
-            if (Snake == null && Snake.Alive != true) { return; }
-            Snake.Grow();
-            gameContainer.Focus();
-        }
-
         // Form Initial Setup
         //
         private void Form1_Load(object sender, EventArgs e)
         {
             // Set Game Container Backgrouond Color
-            string hexCol = "16a085";
+            string hexCol = "2ecc71"; 
             Dictionary<string, int> bgCol = Helpers.HexToRgb(hexCol);
             Color backColor = Color.FromArgb(bgCol["Red"], bgCol["Green"], bgCol["Blue"]);
             gameContainer.BackColor = backColor;
+
+            // Hide announcement
+            announceLabel.Hide();
         }
     }
 }

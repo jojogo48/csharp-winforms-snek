@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Drawing;
 
 namespace Snake.Objects
 {
@@ -39,6 +41,12 @@ namespace Snake.Objects
                 return Difficulties.Keys.ToArray();
             }
         }
+
+        public static string AnnouncementText = "";
+
+        public static Color AnnouncementBGC;
+
+        public static Color AnnouncementFGC;
 
         // RandomString
         // => Return random string from given array of strings
@@ -128,6 +136,18 @@ namespace Snake.Objects
                 { "Green", Convert.ToInt32(_green, 16) },
                 { "Blue", Convert.ToInt32(_blue, 16) }
             };
+        }
+
+        // Announcement
+        // => Make a new panel announcement text inside the given container
+        public static void Announcement(string Text, string BackColor = "000000", string ForeColor = "ffffff")
+        {
+            var newBColor = HexToRgb(BackColor); //"f44336"
+            var newFColor = HexToRgb(ForeColor);
+
+            AnnouncementText = Text;
+            AnnouncementBGC = Color.FromArgb(newBColor["Red"], newBColor["Green"], newBColor["Blue"]);
+            AnnouncementFGC = Color.FromArgb(newFColor["Red"], newFColor["Green"], newFColor["Blue"]);
         }
     }
 }

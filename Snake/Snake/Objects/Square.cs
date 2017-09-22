@@ -137,7 +137,7 @@ namespace Snake.Objects
             Sprite = new PictureBox();
 
             // Set color
-            Console.WriteLine(_color);
+            // Console.WriteLine(_color);
             Color = _color;
 
             // Configure sprite

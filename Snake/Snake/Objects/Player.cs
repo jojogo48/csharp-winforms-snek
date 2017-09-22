@@ -17,7 +17,7 @@ namespace Snake.Objects
         private int DEF_SIZE = 20;
         private int DEF_SPEED = 20;
         private string DEF_HEAD_COLOR = "e74c3c";
-        private string DEF_BODY_COLOR = "2ecc71";
+        private string DEF_BODY_COLOR = "16a085";
 
         // FIELDS
         /* ------ */
@@ -128,7 +128,7 @@ namespace Snake.Objects
             Container = _container;
 
             // Set appearance
-            Console.WriteLine(_size);
+            // Console.WriteLine(_size);
             Size = Helpers.SizeToInt(_size);
             Speed = Size;
 
@@ -306,17 +306,10 @@ namespace Snake.Objects
             Speed = 0; // No speed = no movement. Check
             Alive = false; // Declare dead
 
-            // Add text with score
-            Label ResultLabel = new Label
-            {
-                ForeColor = Color.Red,
-                Text = "Game Over! Your result is: " + Length,
-                AutoSize = true
-            };
-            ResultLabel.Location = new Point(Container.Width / 2 - ResultLabel.Width / 2, Container.Height / 2 - ResultLabel.Height / 2);
+            // Show text with score
 
-            Container.Controls.Add(ResultLabel);
-            Container.Refresh();
+            //// Make the announcement visible
+            Helpers.Announcement("Game over! Your score: " + Tail.Count(), "f44336");
         }
     }
 }
