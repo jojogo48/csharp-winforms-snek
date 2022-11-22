@@ -11,6 +11,7 @@ using Snake.Objects;
 
 namespace Snake
 {
+    //測試用
     public partial class Form1 : Form
     {
         private Player Snake;
