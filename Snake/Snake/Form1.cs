@@ -16,7 +16,7 @@ namespace Snake
     {
         private Player Snake;
         private Food Point;
-
+        private Fubura enemy;
         public Form1()
         {
             InitializeComponent();
@@ -50,10 +50,12 @@ namespace Snake
 
         private void GameTimer_Tick(object sender, EventArgs e)
         {
+    
             // If Snake is not alive show announcement, stop timer and return
             if (Snake.Alive == false)
             {
                 gameTimer.Stop();
+                enemyTimer.Stop();
                 announceLabel.Text = Helpers.AnnouncementText;
                 announceLabel.BackColor = Helpers.AnnouncementBGC;
                 announceLabel.ForeColor = Helpers.AnnouncementFGC;
@@ -72,6 +74,32 @@ namespace Snake
                 Snake.Grow();
             }
 
+            if (enemy != null && Helpers.Collides(Snake.Head, enemy.enemy.Sprite))
+            {
+                Console.WriteLine("Collision detected!");
+                Console.WriteLine("Collision at: Snake(X: {0}, Y: {1}) and Point(X: {2}, Y: {3})", Snake.Head.X, Snake.Head.Y, Point.Sprite.X, Point.Sprite.Y);
+                
+                Form2 f = new Form2();
+                gameTimer.Enabled = false;
+                enemyTimer.Enabled = false;
+                enemy.enemy.Sprite.Sprite.Enabled = false;
+                //使用ShowDialog()方法使 f 以強制回應形式顯示表單
+                f.ShowDialog(this);
+                if (f.DialogResult == System.Windows.Forms.DialogResult.Cancel)
+                {
+
+                    Console.WriteLine("cancel");
+                }
+                gameTimer.Enabled = true;
+                enemyTimer.Enabled = true;
+
+                enemy.enemy.Sprite.Sprite.Enabled = true;
+                enemy.Destroy();
+                enemy = null;
+
+            }
+
+
             // Check for collision between snake head and snake body
             if (Snake.Tail.Count() != 0)
             {
@@ -87,12 +115,17 @@ namespace Snake
             // If there is no point create one
             if (Point == null)
             {
-                int xPos = Helpers.RandomInt(0, 19) * 15;
-                int yPos = Helpers.RandomInt(0, 19) * 15;
+                int xPos = Helpers.RandomInt(0, Properties.Settings.Default.WindowWidth-10);
+                int yPos = Helpers.RandomInt(0, Properties.Settings.Default.WindowHeight - 10);
                 Point = new Food(gameContainer, xPos, yPos);
             }
 
+            if (enemy == null)
+            {
+                enemy = new Fubura(gameContainer);
+            }
             // If Snake is alive keep it moving
+
             Snake.Move();
             Snake.Update();
             scoreLabel.Text = "Score: " + (Snake.Length - 1);
@@ -116,15 +149,16 @@ namespace Snake
             Snake = new Player(gameContainer, size);
 
             // Create new Food
-            int xPos = Helpers.RandomInt(0, 19) * 15;
-            int yPos = Helpers.RandomInt(0, 19) * 15;
+            int xPos = Helpers.RandomInt(0, Properties.Settings.Default.WindowWidth - 10);
+            int yPos = Helpers.RandomInt(0, Properties.Settings.Default.WindowHeight - 10);
             Point = new Food(gameContainer, xPos, yPos);
-
+            enemy = new Fubura(gameContainer);
             // Setup and Start Game Timer
             string difficulty = "Medium";
             gameTimer.Interval = Helpers.DifficultyToInt(difficulty);
+            enemyTimer.Interval = Helpers.DifficultyToInt(difficulty);
             gameTimer.Start();
-
+            enemyTimer.Start();
             // Add KeyPressEvent
             (gameContainer as Control).KeyPress += new KeyPressEventHandler(MainGame);
 
@@ -139,7 +173,9 @@ namespace Snake
             {
                 // Pause/Continue the timer
                 gameTimer.Enabled = !gameTimer.Enabled;
+                enemyTimer.Enabled = !enemyTimer.Enabled;
 
+                enemy.enemy.Sprite.Sprite.Enabled = !enemy.enemy.Sprite.Sprite.Enabled;
                 // Set the text in the button
                 pauseBtn.Text = (gameTimer.Enabled) ? "Pause" : "Continue";
             }
@@ -152,7 +188,7 @@ namespace Snake
         {
             // Stop Game Timer
             gameTimer.Stop();
-
+            enemyTimer.Stop();
             // Dispose Snake
             Snake = null;
 
@@ -181,6 +217,23 @@ namespace Snake
 
             // Hide announcement
             announceLabel.Hide();
+        }
+
+        private void gameContainer_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void enemyTimer_Tick(object sender, EventArgs e)
+        {
+            if(enemy!=null)
+            {
+                do
+                {
+                    enemy.RandomMove();
+                } while (Helpers.Collides(enemy.enemy.Sprite, Point.Sprite));
+                enemy.Update();
+            }
         }
     }
 }

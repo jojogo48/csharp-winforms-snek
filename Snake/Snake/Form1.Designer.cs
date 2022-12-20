@@ -40,8 +40,11 @@
             this.controlsPanel = new System.Windows.Forms.Panel();
             this.scoreLabel = new System.Windows.Forms.Label();
             this.titleLabel = new System.Windows.Forms.Label();
+            this.enemyTimer = new System.Windows.Forms.Timer(this.components);
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.gameContainer.SuspendLayout();
             this.controlsPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // startBtn
@@ -69,8 +72,9 @@
             this.gameContainer.Controls.Add(this.announceLabel);
             this.gameContainer.Location = new System.Drawing.Point(0, 0);
             this.gameContainer.Name = "gameContainer";
-            this.gameContainer.Size = new System.Drawing.Size(300, 300);
+            this.gameContainer.Size = new System.Drawing.Size(1000, 700);
             this.gameContainer.TabIndex = 2;
+            this.gameContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.gameContainer_Paint);
             // 
             // announceLabel
             // 
@@ -80,9 +84,9 @@
             this.announceLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.announceLabel.Font = new System.Drawing.Font("Calibri Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.announceLabel.ForeColor = System.Drawing.Color.White;
-            this.announceLabel.Location = new System.Drawing.Point(0, 241);
+            this.announceLabel.Location = new System.Drawing.Point(0, 641);
             this.announceLabel.Name = "announceLabel";
-            this.announceLabel.Size = new System.Drawing.Size(300, 59);
+            this.announceLabel.Size = new System.Drawing.Size(1000, 59);
             this.announceLabel.TabIndex = 0;
             this.announceLabel.Text = "label1";
             this.announceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -131,15 +135,16 @@
             // controlsPanel
             // 
             this.controlsPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(152)))), ((int)(((byte)(219)))));
+            this.controlsPanel.Controls.Add(this.pictureBox1);
             this.controlsPanel.Controls.Add(this.scoreLabel);
             this.controlsPanel.Controls.Add(this.pauseBtn);
             this.controlsPanel.Controls.Add(this.stopBtn);
             this.controlsPanel.Controls.Add(this.titleLabel);
             this.controlsPanel.Controls.Add(this.infoLabel);
             this.controlsPanel.Controls.Add(this.startBtn);
-            this.controlsPanel.Location = new System.Drawing.Point(299, 0);
+            this.controlsPanel.Location = new System.Drawing.Point(1000, 0);
             this.controlsPanel.Name = "controlsPanel";
-            this.controlsPanel.Size = new System.Drawing.Size(253, 300);
+            this.controlsPanel.Size = new System.Drawing.Size(264, 700);
             this.controlsPanel.TabIndex = 12;
             // 
             // scoreLabel
@@ -164,11 +169,24 @@
             this.titleLabel.Text = "Snek";
             this.titleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // enemyTimer
+            // 
+            this.enemyTimer.Tick += new System.EventHandler(this.enemyTimer_Tick);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(6, 381);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(178, 115);
+            this.pictureBox1.TabIndex = 1;
+            this.pictureBox1.TabStop = false;
+            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(551, 300);
+            this.ClientSize = new System.Drawing.Size(1264, 699);
             this.Controls.Add(this.controlsPanel);
             this.Controls.Add(this.gameContainer);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -179,6 +197,7 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.gameContainer.ResumeLayout(false);
             this.controlsPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -195,6 +214,8 @@
         private System.Windows.Forms.Label titleLabel;
         private System.Windows.Forms.Label scoreLabel;
         public System.Windows.Forms.Label announceLabel;
+        private System.Windows.Forms.Timer enemyTimer;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

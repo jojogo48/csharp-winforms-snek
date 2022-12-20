@@ -107,17 +107,29 @@ namespace Snake.Objects
         // => Check if [Obj1] collides with [Obj2] and return true/false
         public static bool Collides(Square Obj1, Square Obj2)
         {
-            int xAreaMin = Obj1.X;
-            int xAreaMax = Obj1.X + Obj1.Width;
-            int yAreaMin = Obj1.Y;
-            int yAreaMax = Obj1.Y + Obj1.Height;
-
-            bool xColl = Obj2.X >= xAreaMin && Obj2.X < xAreaMax;
-            bool yColl = Obj2.Y >= yAreaMin && Obj2.Y < yAreaMax;
-
-            return (xColl && yColl) ? true : false;
+            if (Obj1.Sprite.Bounds.IntersectsWith(Obj2.Sprite.Bounds))
+            {
+                return true;
+            }
+            return false;
         }
 
+        public static bool Collides(Square Obj1, Character Obj2)
+        {
+            if (Obj1.Sprite.Bounds.IntersectsWith(Obj2.Sprite.Bounds))
+            {
+                return true;
+            }
+            return false;
+        }
+        public static bool Collides(Character Obj1,Square  Obj2)
+        {
+            if (Obj2.Sprite.Bounds.IntersectsWith(Obj1.Sprite.Bounds))
+            {
+                return true;
+            }
+            return false;
+        }
         // HexToRgb
         // => Transoform a HEX string (w/o the #) to RGB values
         // => return as a dictionary for easier access:

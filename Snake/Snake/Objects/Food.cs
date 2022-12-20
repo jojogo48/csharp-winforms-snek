@@ -48,6 +48,7 @@ namespace Snake.Objects
             // Create new square for the head and append to the body of the snake
             Sprite = new Square(Container, FoodColor, Config);
             Index = Container.Controls.IndexOf(Sprite.Sprite);
+            Console.WriteLine("food" + Index);
         }
 
         // Customize constructor color
@@ -70,6 +71,7 @@ namespace Snake.Objects
             // Create new square for the head and append to the body of the snake
             Sprite = new Square(Container, Config);
             Index = Container.Controls.IndexOf(Sprite.Sprite);
+            Console.WriteLine("food" + Index);
         }
 
         // Customize constructor 2
@@ -82,7 +84,8 @@ namespace Snake.Objects
         /* ------- */
         public void Destroy()
         {
-            Container.Controls.RemoveAt(Index);
+            Console.WriteLine("food" + Index);
+            Container.Controls.Remove(Sprite.Sprite);
             Container.Refresh();
         }
 
