@@ -28,6 +28,9 @@ namespace Snake.Objects
         public String PictureL { get; set; }
         public PictureBox Sprite { get; set; }
         public Panel Container { get; set; }
+
+        private int last_move_x { get; set; }
+        private int last_move_y { get; set; }
         public Dictionary<string, int> Size
         {
             get
@@ -103,6 +106,9 @@ namespace Snake.Objects
 
         public void RandomMove()
         {
+
+            int origin_x = X;
+            int origin_y = Y;
             if (WalkCounter != 0)
             {
                 X += Dx;
@@ -112,29 +118,48 @@ namespace Snake.Objects
             else
             {
 
-                int direction = Helpers.RandomInt(0, 5);
+                int direction = Helpers.RandomInt(0, 8);
                 WalkCounter = Helpers.RandomInt(0, 10);
                 switch (direction)
                 {
                     case 0:
                         Dx = DEF_MOVE_SIZE;
+                        Dy = 0;
                         Sprite.ImageLocation = PictureR;
                         break;
                     case 1:
-                        Dx = -DEF_MOVE_SIZE;
-                        Sprite.ImageLocation = PictureL;
+                        Dx = DEF_MOVE_SIZE;
+                        Dy = DEF_MOVE_SIZE;
+                        Sprite.ImageLocation = PictureR;
+                        
                         break;
                     case 2:
+                        Dx = 0;
                         Dy = DEF_MOVE_SIZE;
                         break;
                     case 3:
-                        Dy = -DEF_MOVE_SIZE;
+                        Dx = -DEF_MOVE_SIZE;
+                        Dy = DEF_MOVE_SIZE;
+                        Sprite.ImageLocation = PictureL;
                         break;
                     case 4:
-                        Dx = 0;
+                        Dx = -DEF_MOVE_SIZE;
+                        Dy = 0;
+                        Sprite.ImageLocation = PictureL;
                         break;
                     case 5:
-                        Dy = 0;
+                        Dx = -DEF_MOVE_SIZE;
+                        Dy = -DEF_MOVE_SIZE;
+                        Sprite.ImageLocation = PictureL;
+                        break;
+                    case 6:
+                        Dx = 0;
+                        Dy = -DEF_MOVE_SIZE;
+                        break;
+                    case 7:
+                        Dx = DEF_MOVE_SIZE;
+                        Dy = -DEF_MOVE_SIZE;
+                        Sprite.ImageLocation = PictureR;
                         break;
                     default: break;
                 }
@@ -146,8 +171,15 @@ namespace Snake.Objects
             if (Y+Height >= Properties.Settings.Default.WindowHeight) Y = Properties.Settings.Default.WindowHeight-Height;
             if (Y < 0) Y = 0;
 
+            last_move_x = X - origin_x;
+            last_move_y = Y - origin_y;
         }
 
+        public void RollBack()
+        {
+            X -= last_move_x;
+            Y -= last_move_y;
+        }
         public void Update()
         {
             if (Sprite == null || Container == null)

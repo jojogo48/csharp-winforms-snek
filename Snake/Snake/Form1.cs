@@ -16,7 +16,11 @@ namespace Snake
     {
         private Player Snake;
         private Food Point;
-        private Fubura enemy;
+        private List<Enemy> Enemys = new List<Enemy>();
+        private SnakeEntities db;
+        private Random Rander = new Random();
+        private int question_size = 0;
+
         public Form1()
         {
             InitializeComponent();
@@ -26,7 +30,6 @@ namespace Snake
         //
         private void MainGame(Object sender, KeyPressEventArgs e)
         {
-            if (Snake.Alive == false) { gameTimer.Stop(); return; }
 
             switch (e.KeyChar)
             {
@@ -48,6 +51,178 @@ namespace Snake
             //label1.Text = Snake.Info();
         }
 
+        public void createFood()
+        {
+            if (Point != null)
+            {
+                DestroyFood();
+            }
+
+            int xPos = Helpers.RandomInt(0, Properties.Settings.Default.WindowWidth - 10);
+            int yPos = Helpers.RandomInt(0, Properties.Settings.Default.WindowHeight - 10);
+
+            Point = new Food(gameContainer, xPos, yPos);
+
+        }
+
+
+        public void createEnemys()
+        {
+            if(Enemys.Count<=4)
+            {
+                if (Helpers.RandomInt(0, 50) == 1)
+                {
+
+                    Enemy e;
+                    switch (Helpers.RandomInt(0, 2))
+                    {
+                        case 0:
+                            e = new Fubura(gameContainer);
+                            while(CheckCollidesEnemy(e))
+                            {
+                                e.Destroy();
+                                e = new Fubura(gameContainer);
+                            }
+                            /*while (Helpers.Collides(e.Sprite,Snake.Head))
+                            {
+                                e.Destroy();
+                                e = new Fubura(gameContainer);
+                            }*/
+
+                            Enemys.Add(e);
+                            break;
+                        case 1:
+                            e = new Padoru(gameContainer);
+                            while (CheckCollidesEnemy(e))
+                            {
+                                e.Destroy();
+                                e = new Padoru(gameContainer);
+                            }
+                            /*while (Helpers.Collides(e.Sprite, Snake.Head))
+                            {
+                                e.Destroy();
+                                e = new Padoru(gameContainer);
+                            }*/
+                            Enemys.Add(e);
+                            break;
+                        default:
+                            break;
+                    }
+                    
+                }
+            }
+        }
+
+
+        public void DestroyFood()
+        {
+            if(Point !=null)
+            {
+                Point.Destroy();
+                Point = null;
+            }
+        }
+
+
+        bool CollidesEvent(Enemy e)
+        {
+            if (Helpers.Collides(Snake.Head, e.Sprite))
+            {
+                Console.WriteLine("Collision detected!");
+                if (getScore() < e.max_score)
+                {
+                    Snake.Kill();
+                }
+                else
+                {
+                    int score_t = openQuestionForm();
+                    if (score_t == 0)
+                    {
+                        Snake.Kill();
+                    }
+                    else
+                    {
+                        for (int i = 0; i < score_t; i++)
+                        {
+                            Snake.Grow();
+                        }
+                        e.Destroy();
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        void DisableEnemy(Enemy e)
+        {
+            e.Disable();
+
+        }
+        bool DestroyEnemy(Enemy e)
+        {
+            e.Destroy();
+            return true;   
+        }
+        void EnableEnemy(Enemy e)
+        {
+            e.Enable();
+        }
+        void ReverseEnableEnemy(Enemy e)
+        {
+            e.ReverseEnable();
+        }
+
+        public int getScore()
+        {
+            return (Snake.Length - 1);
+        }
+        public void ShowScoreAndSave()
+        {
+
+
+            var result = from p in db.Histroy
+                         select p.Id;
+
+            Histroy score_t = new Histroy();
+            try
+            {
+                score_t.Id = (result.Max()) + 1;
+            }catch(Exception e)
+            {
+                score_t.Id = 1;
+            }
+            score_t.Score = getScore();
+            score_t.Time = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+            db.Histroy.Add(score_t);
+            db.SaveChanges();
+
+            var score = from p in db.Histroy
+                        select p.Score;
+
+            MessageBox.Show($"獲得分數{getScore()}分\n目前最高分是{score.Max()}", "結果", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+
+
+        public int openQuestionForm()
+        {
+            int index = Rander.Next(0 + 1, this.question_size + 1);
+
+            var qeustion = (from Question in db.Question
+                            where Question.Id == index
+                            select Question).FirstOrDefault();
+
+            QuestionForm f = new QuestionForm(qeustion);
+            gameTimer.Enabled = false;
+            enemyTimer.Enabled = false;
+            Enemys.ForEach(DisableEnemy);
+            f.ShowDialog(this);
+            gameTimer.Enabled = true;
+            enemyTimer.Enabled = true;
+            Enemys.ForEach(EnableEnemy);
+            return f.score;
+        }
         private void GameTimer_Tick(object sender, EventArgs e)
         {
     
@@ -56,6 +231,8 @@ namespace Snake
             {
                 gameTimer.Stop();
                 enemyTimer.Stop();
+                Enemys.ForEach(DisableEnemy);
+                ShowScoreAndSave();
                 announceLabel.Text = Helpers.AnnouncementText;
                 announceLabel.BackColor = Helpers.AnnouncementBGC;
                 announceLabel.ForeColor = Helpers.AnnouncementFGC;
@@ -68,37 +245,11 @@ namespace Snake
             if (Point != null && Helpers.Collides(Snake.Head, Point.Sprite))
             {
                 Console.WriteLine("Collision detected!");
-                Console.WriteLine("Collision at: Snake(X: {0}, Y: {1}) and Point(X: {2}, Y: {3})", Snake.Head.X, Snake.Head.Y, Point.Sprite.X, Point.Sprite.Y);
-                Point.Destroy();
-                Point = null;
+                DestroyFood();
                 Snake.Grow();
             }
 
-            if (enemy != null && Helpers.Collides(Snake.Head, enemy.enemy.Sprite))
-            {
-                Console.WriteLine("Collision detected!");
-                Console.WriteLine("Collision at: Snake(X: {0}, Y: {1}) and Point(X: {2}, Y: {3})", Snake.Head.X, Snake.Head.Y, Point.Sprite.X, Point.Sprite.Y);
-                
-                Form2 f = new Form2();
-                gameTimer.Enabled = false;
-                enemyTimer.Enabled = false;
-                enemy.enemy.Sprite.Sprite.Enabled = false;
-                //使用ShowDialog()方法使 f 以強制回應形式顯示表單
-                f.ShowDialog(this);
-                if (f.DialogResult == System.Windows.Forms.DialogResult.Cancel)
-                {
-
-                    Console.WriteLine("cancel");
-                }
-                gameTimer.Enabled = true;
-                enemyTimer.Enabled = true;
-
-                enemy.enemy.Sprite.Sprite.Enabled = true;
-                enemy.Destroy();
-                enemy = null;
-
-            }
-
+            Enemys.RemoveAll(CollidesEvent);
 
             // Check for collision between snake head and snake body
             if (Snake.Tail.Count() != 0)
@@ -112,23 +263,18 @@ namespace Snake
                 }
             }
 
+
             // If there is no point create one
             if (Point == null)
             {
-                int xPos = Helpers.RandomInt(0, Properties.Settings.Default.WindowWidth-10);
-                int yPos = Helpers.RandomInt(0, Properties.Settings.Default.WindowHeight - 10);
-                Point = new Food(gameContainer, xPos, yPos);
+                createFood();
             }
-
-            if (enemy == null)
-            {
-                enemy = new Fubura(gameContainer);
-            }
+            createEnemys();
             // If Snake is alive keep it moving
 
             Snake.Move();
             Snake.Update();
-            scoreLabel.Text = "Score: " + (Snake.Length - 1);
+            scoreLabel.Text = "Score: " + getScore();
         }
 
         // Button Click Handlers
@@ -148,11 +294,10 @@ namespace Snake
             string size = "Medium"; // DEV PURPOSES
             Snake = new Player(gameContainer, size);
 
-            // Create new Food
-            int xPos = Helpers.RandomInt(0, Properties.Settings.Default.WindowWidth - 10);
-            int yPos = Helpers.RandomInt(0, Properties.Settings.Default.WindowHeight - 10);
-            Point = new Food(gameContainer, xPos, yPos);
-            enemy = new Fubura(gameContainer);
+            Enemys.RemoveAll(DestroyEnemy);
+            createFood();
+            createEnemys();
+
             // Setup and Start Game Timer
             string difficulty = "Medium";
             gameTimer.Interval = Helpers.DifficultyToInt(difficulty);
@@ -175,15 +320,21 @@ namespace Snake
                 gameTimer.Enabled = !gameTimer.Enabled;
                 enemyTimer.Enabled = !enemyTimer.Enabled;
 
-                enemy.enemy.Sprite.Sprite.Enabled = !enemy.enemy.Sprite.Sprite.Enabled;
+                Enemys.ForEach(ReverseEnableEnemy);
                 // Set the text in the button
                 pauseBtn.Text = (gameTimer.Enabled) ? "Pause" : "Continue";
             }
-            announceLabel.Visible = !announceLabel.Visible;
+            //announceLabel.Visible = !announceLabel.Visible;
             // Focus Game Container to remove the ugly border from the button
             gameContainer.Focus();
         }
 
+
+        private void RankingBtn_Click(object sender, EventArgs e)
+        {
+            RankingForm f = new RankingForm(db);
+            f.ShowDialog(this);
+        }
         private void StopBtn_Click(object sender, EventArgs e)
         {
             // Stop Game Timer
@@ -209,6 +360,10 @@ namespace Snake
         //
         private void Form1_Load(object sender, EventArgs e)
         {
+            this.db = new SnakeEntities();
+            this.question_size = (from p in db.Question
+                                  select p.Id).Count();
+
             // Set Game Container Backgrouond Color
             string hexCol = "2ecc71"; 
             Dictionary<string, int> bgCol = Helpers.HexToRgb(hexCol);
@@ -226,14 +381,50 @@ namespace Snake
 
         private void enemyTimer_Tick(object sender, EventArgs e)
         {
-            if(enemy!=null)
+
+            Enemys.ForEach(EnemyMove);
+        }
+
+        bool CheckCollidesEnemy(Enemy e1)
+        {
+            foreach(var e in Enemys)
             {
-                do
+                if(e!= e1 && Helpers.Collides(e.Sprite,e1.Sprite))
                 {
-                    enemy.RandomMove();
-                } while (Helpers.Collides(enemy.enemy.Sprite, Point.Sprite));
-                enemy.Update();
+                    return true;
+                }
             }
+            return false;
+        }
+        bool CheckCollidesSnake(Enemy e1)
+        {
+
+            foreach (var part in Snake.Tail)
+            {
+                if (Helpers.Collides(e1.Sprite, part))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        void EnemyMove(Enemy e)
+        {
+            e.RandomMove();
+            if(CheckCollidesEnemy(e) || CheckCollidesSnake(e))
+            {
+                e.RollBack();
+            }
+            e.Update();
+            if (Point!= null && Helpers.Collides(e.Sprite, Point.Sprite))
+            {
+                DestroyFood();
+            }
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

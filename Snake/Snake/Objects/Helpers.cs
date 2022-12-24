@@ -107,24 +107,84 @@ namespace Snake.Objects
         // => Check if [Obj1] collides with [Obj2] and return true/false
         public static bool Collides(Square Obj1, Square Obj2)
         {
-            if (Obj1.Sprite.Bounds.IntersectsWith(Obj2.Sprite.Bounds))
+
+            int x1_min = Obj1.X;
+            int x1_max = Obj1.X + Obj1.Width;
+            int y1_min = Obj1.Y;
+            int y1_max = Obj1.Y + Obj1.Height;
+
+
+            int x2_min = Obj2.X;
+            int x2_max = Obj2.X + Obj2.Width;
+            int y2_min = Obj2.Y;
+            int y2_max = Obj2.Y + Obj2.Height;
+
+            if (x1_max > x2_min && x2_max > x1_min && y1_max > y2_min && y2_max > y1_min)
+            {
+                return true;
+            }
+            return false;
+
+        }
+
+        public static bool Collides(Square Obj1, Character Obj2)
+        {
+            
+
+            int x1_min = Obj1.X ;
+            int x1_max = Obj1.X + Obj1.Width;
+            int y1_min = Obj1.Y;
+            int y1_max = Obj1.Y + Obj1.Height;
+
+
+            int x2_min = Obj2.X;
+            int x2_max = Obj2.X + Obj2.Width;
+            int y2_min = Obj2.Y;
+            int y2_max = Obj2.Y + Obj2.Height;
+            
+            if(x1_max>x2_min && x2_max > x1_min && y1_max > y2_min && y2_max > y1_min)
+            {
+                return true;
+            }
+            return false;
+
+
+        }
+        public static bool Collides(Character Obj1,Square  Obj2)
+        {
+            int x1_min = Obj1.X;
+            int x1_max = Obj1.X + Obj1.Width;
+            int y1_min = Obj1.Y;
+            int y1_max = Obj1.Y + Obj1.Height;
+
+
+            int x2_min = Obj2.X;
+            int x2_max = Obj2.X + Obj2.Width;
+            int y2_min = Obj2.Y;
+            int y2_max = Obj2.Y + Obj2.Height;
+
+            if (x1_max > x2_min && x2_max > x1_min && y1_max > y2_min && y2_max > y1_min)
             {
                 return true;
             }
             return false;
         }
 
-        public static bool Collides(Square Obj1, Character Obj2)
+
+        public static bool Collides(Character Obj1, Character Obj2)
         {
-            if (Obj1.Sprite.Bounds.IntersectsWith(Obj2.Sprite.Bounds))
-            {
-                return true;
-            }
-            return false;
-        }
-        public static bool Collides(Character Obj1,Square  Obj2)
-        {
-            if (Obj2.Sprite.Bounds.IntersectsWith(Obj1.Sprite.Bounds))
+            int x1_min = Obj1.X;
+            int x1_max = Obj1.X + Obj1.Width;
+            int y1_min = Obj1.Y;
+            int y1_max = Obj1.Y + Obj1.Height;
+
+
+            int x2_min = Obj2.X;
+            int x2_max = Obj2.X + Obj2.Width;
+            int y2_min = Obj2.Y;
+            int y2_max = Obj2.Y + Obj2.Height;
+
+            if (x1_max > x2_min && x2_max > x1_min && y1_max > y2_min && y2_max > y1_min)
             {
                 return true;
             }
