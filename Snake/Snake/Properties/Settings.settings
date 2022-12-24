@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="Media" Type="System.String" Scope="User">
-      <Value Profile="(Default)">F:\C#\csharp-winforms-snek\Snake\Snake\Media\</Value>
+      <Value Profile="(Default)">..\..\Media\</Value>
     </Setting>
     <Setting Name="WindowWidth" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1000</Value>
