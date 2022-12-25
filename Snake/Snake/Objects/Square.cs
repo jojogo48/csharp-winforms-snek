@@ -18,6 +18,7 @@ namespace Snake.Objects
         protected int DEF_POS_Y = 0;
         protected int DEF_WIDTH = 10;
         protected int DEF_HEIGHT = 10;
+        protected string DEF_IMAGE = null;
         protected Color DEF_COLOR = Color.Black;
 
         // PROPERTIES
@@ -26,6 +27,7 @@ namespace Snake.Objects
         public int Y { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
+        public string Image { get; set; }
         public Color Color { get; set; }
         public PictureBox Sprite { get; set; }
         public Panel Container { get; set; }
@@ -110,6 +112,8 @@ namespace Snake.Objects
             Color = (_options.ContainsKey("Color") && _options["Color"] != null) ? Color.FromName(_options["Color"]) : DEF_COLOR;
             Width = (_options.ContainsKey("Width") && _options["Width"] != null) ? Convert.ToInt32(_options["Width"]) : DEF_WIDTH;
             Height = (_options.ContainsKey("Height") && _options["Height"] != null) ? Convert.ToInt32(_options["Height"]) : DEF_HEIGHT;
+            Sprite.SizeMode = PictureBoxSizeMode.StretchImage;
+            Image = (_options.ContainsKey("Image") && _options["Image"] != null) ? _options["Image"] : DEF_IMAGE;
 
             // Update sprite
             Update();
@@ -145,7 +149,9 @@ namespace Snake.Objects
             Y = (_options.ContainsKey("Y") && _options["Y"] != null) ? Convert.ToInt32(_options["Y"]) : DEF_POS_Y;
             Width = (_options.ContainsKey("Width") && _options["Width"] != null) ? Convert.ToInt32(_options["Width"]) : DEF_WIDTH;
             Height = (_options.ContainsKey("Height") && _options["Height"] != null) ? Convert.ToInt32(_options["Height"]) : DEF_HEIGHT;
-            
+
+            Image = (_options.ContainsKey("Image") && _options["Image"] != null) ? _options["Image"] : DEF_IMAGE;
+            Sprite.SizeMode = PictureBoxSizeMode.StretchImage;
             // Update sprite
             Update();
 
@@ -188,8 +194,11 @@ namespace Snake.Objects
             {
                 return;
             }
-
-            if (Sprite.BackColor != Color) { Sprite.BackColor = Color; }
+            if(Image!=null)
+            {
+                Sprite.ImageLocation = Properties.Settings.Default.Media + Image;
+            }
+            else if (Sprite.BackColor != Color) { Sprite.BackColor = Color; }
             if (Sprite.Location.X != X || Sprite.Location.Y != Y) { Sprite.Location = new Point(X, Y); }
             if (Width != Sprite.Size.Width || Height != Sprite.Size.Height) { Sprite.Size = new Size(Width, Height); }
         }

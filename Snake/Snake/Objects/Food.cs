@@ -12,9 +12,9 @@ namespace Snake.Objects
     {
         // DEFAULTS
         /* -------- */
-        private int DEF_SIZE = Helpers.SizeToInt("Medium");
+        private int DEF_SIZE = 50;
         private string DEF_COLOR = "8e44ad";
-
+        private string DEF_IMAGE = "food.png";
         // PROPERTIES
         /* ---------- */
         public int Size { get; set; }
@@ -40,7 +40,7 @@ namespace Snake.Objects
             Config.Add("Width", Size.ToString());
             Config.Add("Height", Size.ToString());
             Config.Add("Color", DEF_COLOR);
-
+            Config.Add("Image", DEF_IMAGE);
             // Make up the color
             Dictionary<string, int> _hexCol = Helpers.HexToRgb(DEF_COLOR);
             Color FoodColor = Color.FromArgb(_hexCol["Red"], _hexCol["Green"], _hexCol["Blue"]);
@@ -68,6 +68,7 @@ namespace Snake.Objects
             Config.Add("Height", Size.ToString());
             Config.Add("Color", _color.ToKnownColor().ToString());
 
+            Config.Add("Image", DEF_IMAGE);
             // Create new square for the head and append to the body of the snake
             Sprite = new Square(Container, Config);
             Index = Container.Controls.IndexOf(Sprite.Sprite);

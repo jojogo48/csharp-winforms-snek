@@ -17,7 +17,7 @@ namespace Snake.Objects
         private int DEF_SIZE = 20;
         private int DEF_SPEED = 20;
         private string DEF_HEAD_COLOR = "e74c3c";
-        private string DEF_BODY_COLOR = "16a085";
+        private string DEF_BODY_COLOR = "ffffff";
 
         // FIELDS
         /* ------ */

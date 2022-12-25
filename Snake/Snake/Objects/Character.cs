@@ -24,6 +24,7 @@ namespace Snake.Objects
         public int Y { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
+        public Color BackgroundColor { get; set; }
         public String PictureR { get; set; }
         public String PictureL { get; set; }
         public PictureBox Sprite { get; set; }
@@ -83,6 +84,7 @@ namespace Snake.Objects
             //Picture = (_options.ContainsKey("Image") && _options["Image"] != null) ? Image.FromStream(fs) : null;
             Width = (_options.ContainsKey("Width") && _options["Width"] != null) ? Convert.ToInt32(_options["Width"]) : DEF_WIDTH;
             Height = (_options.ContainsKey("Height") && _options["Height"] != null) ? Convert.ToInt32(_options["Height"]) : DEF_HEIGHT;
+
             Sprite.SizeMode = PictureBoxSizeMode.StretchImage;
             Sprite.ImageLocation = PictureR;
             // Update sprite

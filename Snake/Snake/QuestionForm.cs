@@ -12,11 +12,13 @@ namespace Snake
 {
     public partial class QuestionForm : Form
     {
+        public int enemy_score { get; set; }
         public int score { get; set; }
         public string ans { get; set; }
         private Question question { get; set; }
-        public QuestionForm(Question question)
+        public QuestionForm(Question question,int enmey_score)
         {
+            this.enemy_score = enmey_score;
             this.question = question;
             InitializeComponent();
         }
@@ -39,21 +41,21 @@ namespace Snake
             
             if (radioButton1.Checked && ans.CompareTo("1")==0)
             {
-                score = 3;
+                score = enemy_score;
             }
             if (radioButton2.Checked && ans.CompareTo("2") == 0)
             {
-                score = 3;
+                score = enemy_score;
             }
             if (radioButton3.Checked && ans.CompareTo("3") == 0)
             {
-                score = 3;
+                score = enemy_score;
             }
             if (radioButton4.Checked && ans.CompareTo("4") == 0)
             {
-                score = 3;
+                score = enemy_score;
             }
-            if(score == 3)
+            if(score == enemy_score)
             {
                 DialogResult Result = MessageBox.Show($"恭喜答對\n獲得分數{score}分", "結果", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

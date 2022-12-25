@@ -9,8 +9,8 @@ namespace Snake.Objects
 {
     class Padoru:Enemy
     {
-        private int image_width = 130;
-        private int image_height = 145;
+        private int image_width = 121;
+        private int image_height = 126;
         public Padoru(Panel _container):base(_container)
         {
 

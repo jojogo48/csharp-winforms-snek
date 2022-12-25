@@ -25,7 +25,7 @@ namespace Snake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\..\\Media\\")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Media\\")]
         public string Media {
             get {
                 return ((string)(this["Media"]));
