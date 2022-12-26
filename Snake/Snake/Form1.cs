@@ -69,6 +69,40 @@ namespace Snake
 
         }
 
+        public void createEnemysByFood()
+        {
+            Enemy e;
+            switch (Helpers.RandomInt(0, 5))
+            {
+                case 0:
+                    e = new Fubura(gameContainer);
+                    if (CheckCollidesEnemy(e) || CheckCollidesSnake(e))
+                    {
+                        e.Destroy();
+                    }
+                    else
+                    {
+                        Enemys.Add(e);
+                    }
+                    break;
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    e = new Padoru(gameContainer);
+                    if (CheckCollidesEnemy(e) || CheckCollidesSnake(e))
+                    {
+                        e.Destroy();
+                    }
+                    else
+                    {
+                        Enemys.Add(e);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
 
         public void createEnemys()
         {
@@ -248,9 +282,29 @@ namespace Snake
             // Check for collision between snake head and point
             if (Point != null && Helpers.Collides(Snake.Head, Point.Sprite))
             {
-                //Console.WriteLine("Collision detected!");
+                //Console.WriteLine("!!!!!!!!!! " + Point.foodColor);
+                if(Point.foodColor == "FF2828") // 紅色 加速
+                {
+                    gameTimer.Interval -= 3;
+                }
+                else if (Point.foodColor == "FFFF4A") // 黃色 答對加分
+                {
+                    if (openQuestionForm(1) == 1)
+                    {
+                        Snake.Grow();
+                    }
+                }
+                else if (Point.foodColor == "000000") // 黑色 吃了加分 但有機率生成一隻怪
+                {
+                    Console.WriteLine("Create eneny by food.");
+                    createEnemysByFood();
+                    Snake.Grow();
+                }
+                else // 藍色 單純加分沒事
+                {
+                    Snake.Grow();
+                }
                 DestroyFood();
-                Snake.Grow();
             }
 
             Enemys.RemoveAll(CollidesEvent);
@@ -412,7 +466,10 @@ namespace Snake
 
         public void player_PlayStateChange(object sender, AxWMPLib._WMPOCXEvents_PlayStateChangeEvent e)
         {
-            axWindowsMediaPlayer1.Ctlcontrols.play();
+            if(gameTimer.Enabled)
+            {
+                axWindowsMediaPlayer1.Ctlcontrols.play();
+            }
         }
 
         // Form Initial Setup
