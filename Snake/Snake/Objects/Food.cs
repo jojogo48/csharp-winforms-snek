@@ -16,7 +16,6 @@ namespace Snake.Objects
         //private string DEF_COLOR = "8e44ad";
         private List<string> DEF_COLOR = new List<string>() { "FFFF4A", "0033FF", "FF2828", "000000" }; // 黃 藍 紅 黑
         Random rnd = new Random();
-        private int tmp = 0;
         private int colorNum = 0;
         //private string DEF_IMAGE = "food.png";
         // PROPERTIES
@@ -44,25 +43,7 @@ namespace Snake.Objects
             Config.Add("Y", _y.ToString());
             Config.Add("Width", Size.ToString());
             Config.Add("Height", Size.ToString());
-            tmp = rnd.Next(10);
-
-            if(tmp >= 0 && tmp <= 4)
-            {
-                colorNum = 1;
-            }
-            else if(tmp >= 5 && tmp <= 6)
-            {
-                colorNum = 0;
-            }
-            else if (tmp >= 7 && tmp <= 8)
-            {
-                colorNum = 3;
-            }
-            else if (tmp == 9)
-            {
-                colorNum = 2;
-            }
-
+            colorNum = rnd.Next(4);
             Config.Add("Color", DEF_COLOR[colorNum]);
             //Config.Add("Image", DEF_IMAGE);
             // Make up the color
